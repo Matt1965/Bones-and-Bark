@@ -1,12 +1,11 @@
 do
-    local function TriggerSetup()
-        local shadowRemoval = CreateTrigger()
-        TriggerRegisterDestDeathInRegionEvent(shadowRemoval, GetPlayableMapRect())
-        TriggerAddCondition(shadowRemoval, Filter(NearbyCondition))
-        TriggerAddAction(shadowRemoval, RemoveShadow)
+    function TriggerSetup()
+        ShadowRemovalTrigger = CreateTrigger()
+        TriggerAddCondition(ShadowRemovalTrigger, Filter(NearbyCondition))
+        TriggerAddAction(ShadowRemovalTrigger, RemoveShadow)
 
         local leash = CreateTrigger()
-        TriggerRegisterTimerEventPeriodic(leash, 1)
+        TriggerRegisterTimerEventPeriodic(leash, .5)
         TriggerAddAction(leash, EnforceLeash)
 
         local unitDeath = CreateTrigger()
@@ -16,6 +15,14 @@ do
         local unitBirth = CreateTrigger()
         TriggerRegisterEnterRectSimple(unitBirth, GetPlayableMapRect())
         TriggerAddAction(unitBirth, UnitBirth)
+
+        local attackMoveForest = CreateTrigger()
+        TriggerRegisterTimerEventPeriodic(attackMoveForest, 15)
+        TriggerAddAction(attackMoveForest, AttackMove)
+
+        local startWave = CreateTrigger()
+        TriggerRegisterGameStateEventTimeOfDay(startWave, EQUAL, 18.0)
+        TriggerAddAction(startWave, SpawnForestWave)
 
     end
 
